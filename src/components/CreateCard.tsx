@@ -1,7 +1,6 @@
 
 import React, { useState, FunctionComponent } from 'react';
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
-import { TodoType } from '../types';
 import { isOnlySpaces } from '../utils';
 import {Button, TextField} from '../styles';
 import { SmallButton } from '../styles/Button';
@@ -14,13 +13,15 @@ const useStyles = makeStyles((theme: Theme) =>
 		}
 	}));
 
-export const CreateTodo: FunctionComponent<CreateTodoProps> = ({ onAddTodo }) => {
+export const CreateCard: FunctionComponent<CreateCardProps> = ({ onAddCard }) => {
 	const classes = useStyles();
+
 	const defaultState = {
 		input: '',
 		adding: false,
 	};
 	const [state, setState] = useState<State>(defaultState);
+
 	function onChange(e: React.ChangeEvent<HTMLInputElement>) {
 		setState({
 			...state,
@@ -36,10 +37,7 @@ export const CreateTodo: FunctionComponent<CreateTodoProps> = ({ onAddTodo }) =>
 
 	function onSubmit() {
 
-		onAddTodo({
-			todo: state.input,
-			complete: false
-		});
+		onAddCard(state.input);
 		setState({
 			...state,
 			input: '',
@@ -64,7 +62,6 @@ export const CreateTodo: FunctionComponent<CreateTodoProps> = ({ onAddTodo }) =>
 	function getDefaultView() {
 		return (
 			<>
-				{/* <TextField id="todo-input" onChange={onChange} onKeyDown={handleKeyDown} value={state.input} autoComplete='off'></TextField> */}
 				<Button type='submit' onClick={onAdd}>+ Add a Card</Button>
 			</>
 		);
@@ -73,7 +70,7 @@ export const CreateTodo: FunctionComponent<CreateTodoProps> = ({ onAddTodo }) =>
 	function getAddingView() {
 		return (
 			<>
-				<TextField id="todo-input" onChange={onChange} onKeyDown={handleKeyDown} value={state.input} autoComplete='off'></TextField>
+				<TextField onChange={onChange} onKeyDown={handleKeyDown} value={state.input} autoFocus autoComplete='off'></TextField>
 				<Button type='submit' onClick={onSubmit} disabled={isSubmitDisabled()}>Add Card</Button>
 				<SmallButton type='submit' onClick={onCancel} >X</SmallButton>
 			</>
@@ -87,8 +84,8 @@ export const CreateTodo: FunctionComponent<CreateTodoProps> = ({ onAddTodo }) =>
 		</div>);
 }
 
-type CreateTodoProps = {
-	onAddTodo: (todo: TodoType) => void
+type CreateCardProps = {
+	onAddCard: (value: string) => void
 }
 
 type State = {
