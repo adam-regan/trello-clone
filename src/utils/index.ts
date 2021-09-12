@@ -1,0 +1,1 @@
+export { isOnlySpaces } from './isOnlySpaces';
