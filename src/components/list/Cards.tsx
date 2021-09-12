@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme: Theme) =>
 			width: '400px',
 			backgroundColor: '#EBECF0',
 			borderRadius: '5px',
-			paddingBottom: '5px'
+			paddingBottom: '5px',
 		},
 		title: {
 			display: 'flex',

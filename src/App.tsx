@@ -1,21 +1,19 @@
 import React, { useState } from 'react';
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import { CssBaseline } from "@material-ui/core";
-import { List } from './components';
+import { Header, List } from './components';
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
 		root: {
-			flex: 1,
 			display: 'flex',
-			flexDirection: 'row',
-			alignItems: 'center',
+			flexDirection: 'column',
 			width: '100vw',
 			height: '100vh',
-			marginLeft: 'auto',
-			marginRight: 'auto',
 			backgroundColor: '#0479BE',
-			borderRadius: '5px'
+		},
+		lists: {
+			display: 'flex'
 		}
 	}));
 
@@ -29,12 +27,15 @@ export const App = () => {
 	return (
 		<div className={classes.root}>
 			<CssBaseline />
-			{state.lists.map((title, index) => (
-				<List
-					key={index}
-					listIndex={index}
-					title={title}/>
-			))}
+			<Header />
+			<div className={classes.lists}>
+				{state.lists.map((title, index) => (
+					<List
+						key={index}
+						listIndex={index}
+						title={title} />
+				))}
+			</div>
 		</div>
 	);
 }

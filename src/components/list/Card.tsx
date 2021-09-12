@@ -1,7 +1,7 @@
 import React, { useState, FunctionComponent } from 'react';
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
-import { isOnlySpaces } from '../utils';
-import { SmallButton } from '../styles/Button';
+import { isOnlySpaces } from '../../utils';
+import { SmallButton } from '../../styles/Button';
 
 
 const useStyles = makeStyles((theme: Theme) =>

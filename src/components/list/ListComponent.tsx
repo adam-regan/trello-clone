@@ -5,16 +5,9 @@ import { Cards } from './';
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
 		root: {
-			flex: 1,
-			display: 'flex',
-			flexDirection: 'column',
-			alignItems: 'center',
-			width: '100vw',
-			height: '100vh',
-			marginLeft: 'auto',
-			marginRight: 'auto',
-			backgroundColor: '#0479BE',
-			borderRadius: '5px'
+			paddingLeft: '10px',
+			paddingTop: '10px',
+			paddingBottom: '10px',
 		}
 	}));
 

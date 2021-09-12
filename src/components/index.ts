@@ -1,4 +1,2 @@
-export { CreateCard } from './CreateCard';
-export { Card } from './Card';
-export { Cards } from './Cards';
-export { List } from './List';
+export { List } from './list';
+export { Header } from './Header';
