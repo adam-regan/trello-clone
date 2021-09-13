@@ -15,12 +15,18 @@ const useStyles = makeStyles((theme: Theme) =>
 			borderRadius: '5px',
 			marginTop: '2px',
 			marginBottom: '2px',
+			cursor: 'pointer'
 		},
-			content: {
-				display: 'flex',
-				justifyContent: 'space-between',
-				width: '386px'
-			}
+		content: {
+			display: 'flex',
+			justifyContent: 'space-between',
+			alignItems: 'center',
+			width: '386px',
+			margin: '5px'
+		},
+		title: {
+			paddingLeft: '5px'
+		}
 	}));
 
 export const Card: FunctionComponent<CardProps> = ({ title, deleteCard, editCard, index }) => {
@@ -58,10 +64,8 @@ export const Card: FunctionComponent<CardProps> = ({ title, deleteCard, editCard
 	function getStaticView() {
 		return (
 			<div className={classes.content}>
-				<div className={classes.root}>
-					<p >{title}</p>
-				</div>
-				<div className={classes.root}>
+				<p className={classes.title}>{title}</p>
+				<div>
 					<SmallButton type='submit' onClick={onClickEdit}>Edit</SmallButton>
 					<SmallButton type='submit' onClick={onClickDelete}>Delete</SmallButton>
 				</div>
