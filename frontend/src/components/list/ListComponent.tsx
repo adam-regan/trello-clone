@@ -1,7 +1,9 @@
 import React, { useState, FunctionComponent } from 'react';
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
-import { Card, CreateCard } from './';
+import { Card as CardComponent, CreateCard } from './';
 import { SmallButton } from '../../styles/Button';
+import { addCard as apiAddCard, deleteCard as apiDeleteCard, editCard as apiEditCard, getCards } from '../../lib/api';
+import { useEffect } from 'react';
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -31,40 +33,43 @@ const useStyles = makeStyles((theme: Theme) =>
 		}
 	}));
 
-export const List: FunctionComponent<ListProps> = ({ title, listIndex, deleteList }) => {
+export const List: FunctionComponent<ListProps> = ({ title, _id, listIndex, deleteList }) => {
 	const classes = useStyles();
 	const [state, setState] = useState<State>({
 		title: title,
 		cards: []
 	});
 
-	function addCard(value: string) {
-		const newList = state.cards.concat([value]);
+	useEffect(() => {
+		getData();
+	}, []);
+
+	const getData = async () => {
+		const res = await getCards(_id);
 		setState({
 			...state,
-			cards: newList,
+			cards: res.data,
 		});
 	}
-	function deleteCard(index: number) {
-		const cardsCopy = [...state.cards];
-		cardsCopy.splice(index, 1);
-		setState({
-			...state,
-			cards: cardsCopy
-		})
+
+	async function addCard(value: string) {
+		await apiAddCard(value, _id);
+		getData();
+	}
+	async function deleteCard(index: number) {
+		const cardID = state.cards[index]._id;
+		await apiDeleteCard(cardID);
+		getData();
 	}
 
-	function editCard(index: number, value: string) {
-		const cardsCopy = [...state.cards];
-		cardsCopy[index] = value;
-		setState({
-			...state,
-			cards: cardsCopy
-		})
+	async function editCard(index: number, value: string) {
+		const cardID = state.cards[index]._id;
+		await apiEditCard(cardID, value);
+		getData();
 	}
 
 	function onDeleteSelf() {
-		deleteList(listIndex);
+		deleteList(_id);
 	}
 
 	return (
@@ -75,8 +80,8 @@ export const List: FunctionComponent<ListProps> = ({ title, listIndex, deleteLis
 					<SmallButton onClick={onDeleteSelf}>X</SmallButton>
 				</div >
 				<div className={classes.todos}>
-					{state.cards.map((value, index) => {
-						return (<Card key={index} title={value} index={index} deleteCard={deleteCard} editCard={editCard} />)
+					{state.cards.map((card, index) => {
+						return (<CardComponent key={index} title={card.card_name} index={index} deleteCard={deleteCard} editCard={editCard} />)
 					})}
 				</div>
 				<CreateCard onAddCard={addCard} />
@@ -87,11 +92,18 @@ export const List: FunctionComponent<ListProps> = ({ title, listIndex, deleteLis
 
 type State = {
 	title: string
-	cards: string[]
+	cards: Card[]
 }
 
 type ListProps = {
+	_id: string,
 	title: string,
 	listIndex: number,
-	deleteList: (index:number) => void
+	deleteList: (index:string) => void
+}
+
+type Card = {
+	_id: string,
+	list_id: string,
+	card_name: string
 }

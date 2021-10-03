@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import { CssBaseline } from "@material-ui/core";
 import { Header, List, AddList } from './components';
+import { addList, getAllLists, deleteList as apiDeleteList } from './lib/api';
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -24,43 +25,48 @@ export const App = () => {
 		lists: []
 	});
 
-	function addList(title: string) {
-		const newLists = state.lists.concat([title]);
+	useEffect(() => {
+		getData();
+	}, []);
 
+	const getData = async () => {
+		const res = await getAllLists();
 		setState({
-			...state,
-			lists: newLists
+			lists: res.data
 		});
 	}
 
-	function deleteList(index: number) {
-		const newLists = [...state.lists];
-		newLists.splice(index, 1);
-		setState({
-			...state,
-			lists: newLists
-		})
+	async function addToLists(title: string) {
+		await addList(title);
+		getData();
 	}
 
+	async function deleteList(id: string) {
+		await apiDeleteList(id)
+		getData();
+	}
 
 	return (
 		<div className={classes.root}>
 			<CssBaseline />
 			<Header />
 			<div className={classes.lists}>
-				{state.lists.map((title, index) => (
+				{state.lists.map((list, index) => (
 					<List
 						key={index}
+						_id={list._id}
 						listIndex={index}
-						title={title}
+						title={list.list_name}
 						deleteList={deleteList} />
 				))}
-			<AddList onAddList={addList}/>
+			<AddList onAddList={addToLists}/>
 			</div>
 		</div>
 	);
 }
 
 type State = {
-	lists: string[];
+	lists: ListType[];
 }
+
+type ListType = {_id: string, list_name: string};
